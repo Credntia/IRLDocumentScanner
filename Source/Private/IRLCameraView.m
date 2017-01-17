@@ -270,7 +270,7 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
 - (void)start {
 
 	if (self.gradient == nil){
-		self.gradient =  [CIImage imageGradientImage:0.3];
+		self.gradient = [CIImage imageGradientImage:0.3];
 	}
 
 	_isStopped = NO;
@@ -417,8 +417,6 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
 		[weakSelf hideGLKView:NO completion:nil];
 
 		if (completionHandler) completionHandler(finalImage);
-
-		[self stop];
 	}];
 }
 
