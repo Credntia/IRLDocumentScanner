@@ -11,7 +11,18 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var imageView:  UIImageView!
-	@IBOutlet weak var cameraView: IRLCameraView!
+	@IBOutlet weak var cameraView: IRLCameraView! {
+		didSet {
+			cameraView.setupCameraView()
+			cameraView.delegate = self
+			cameraView.alpha = 0
+			cameraView.overlayColor = .white
+			cameraView.detectorType = .performance
+			cameraView.cameraViewType = .normal
+			cameraView.isShowAutoFocusEnabled = true
+			cameraView.isBorderDetectionEnabled = true
+		}
+	}
     
     // MARK: User Actions
 
@@ -23,24 +34,27 @@ class ViewController: UIViewController {
         scanner.showAutoFocusWhiteRectangle = false
         present(scanner, animated: true, completion: nil)
 		*/
+
+		imageView.image = nil
+		cameraView.start()
+
+		view.bringSubview(toFront: cameraView)
+
+		UIView.animate(withDuration: 0.3, delay: 0.1, options: [], animations: {
+			self.cameraView.alpha = 1
+		}, completion: nil)
     }
-
-	override func viewDidLoad() {
-		super.viewDidLoad()
-
-		cameraView.setupCameraView()
-		cameraView.delegate = self
-		cameraView.overlayColor = .white
-		cameraView.detectorType = .performance
-		cameraView.cameraViewType = .normal
-		cameraView.isShowAutoFocusEnabled = true
-		cameraView.isBorderDetectionEnabled = true
-	}
 
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 
 		cameraView.start()
+
+		view.bringSubview(toFront: cameraView)
+
+		UIView.animate(withDuration: 0.3, delay: 0.1, options: [], animations: {
+			self.cameraView.alpha = 1
+		}, completion: nil)
 	}
 }
 
@@ -59,7 +73,12 @@ extension ViewController: IRLCameraViewProtocol {
 
 		view.captureImage { [weak self](image: UIImage?) in
 			self?.imageView.image = image
-			view.stop()
+
+			UIView.animate(withDuration: 0.3, animations: { 
+				view.alpha = 0
+			}) { (_) in
+				view.stop()
+			}
 		}
 	}
 

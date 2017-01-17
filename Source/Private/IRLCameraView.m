@@ -284,6 +284,9 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
 }
 
 - (void)stop {
+	if (_isStopped) {
+		return;
+	}
 	_isStopped = YES;
 
 	_imageDedectionConfidence = 0.0;
