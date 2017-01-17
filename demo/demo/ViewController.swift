@@ -36,6 +36,7 @@ class ViewController: UIViewController {
 		cameraView.isShowAutoFocusEnabled = true
 		cameraView.isBorderDetectionEnabled = true
 		cameraView.minimumConfidenceForFullDetection = 80
+		cameraView.imageDedectionConfidence = 0
 	}
 
 	override func viewDidAppear(_ animated: Bool) {

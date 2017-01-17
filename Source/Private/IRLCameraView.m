@@ -17,8 +17,7 @@
     GLKView*                _glkView;
     
     BOOL                    _isStopped;
-    
-    CGFloat                 _imageDedectionConfidence;
+
     NSTimer*                _borderDetectTimeKeeper;
     BOOL                    _borderDetectFrame;
     CIRectangleFeature*     _borderDetectLastRectangleFeature;
