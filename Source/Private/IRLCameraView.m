@@ -15,7 +15,9 @@
     CIContext*              _coreImageContext;
     GLuint                  _renderBuffer;
     GLKView*                _glkView;
-    
+
+	CGFloat                 _imageDedectionConfidence;
+
     BOOL                    _isStopped;
 
     NSTimer*                _borderDetectTimeKeeper;
@@ -112,7 +114,6 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    [self setMinimumConfidenceForFullDetection:66];
     [self setMaximumConfidenceForFullDetection:100];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_backgroundMode) name:UIApplicationWillResignActiveNotification object:nil];
@@ -206,8 +207,6 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
     AVCaptureDevice *device = [possibleDevices firstObject];
     if (!device) return;
     
-    _imageDedectionConfidence = 0.0;
-    
     // Session Congfguration
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     [session beginConfiguration];
@@ -288,6 +287,8 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
 
 - (void)stop {
     _isStopped = YES;
+
+	_imageDedectionConfidence = 0.0;
     
     [self.captureSession stopRunning];
     
@@ -439,13 +440,6 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
     }];
 }
 
-#pragma mark -
-#pragma mark Setters / Getters
-
-- (void)setMinimumConfidenceForFullDetection:(NSUInteger)minimumConfidenceForFullDetection {
-    if (minimumConfidenceForFullDetection > 100) _minimumConfidenceForFullDetection = 100;
-    else _minimumConfidenceForFullDetection = minimumConfidenceForFullDetection;
-}
 
 - (void)setCameraViewType:(IRLScannerViewType)cameraViewType {
     UIBlurEffect * effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
@@ -572,7 +566,7 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
         confidence = confidence > 100 ? 100 : confidence;
         
         // Fix the last rectangle detected
-        if (_borderDetectFrame && confidence < self.minimumConfidenceForFullDetection) {
+        if (_borderDetectFrame) {
 			NSArray *rectangles = [self.detector featuresInImage:image];
 			_borderDetectLastRectangleFeature = [CIRectangleFeature biggestRectangleInRectangles:rectangles];
             _borderDetectFrame = NO;

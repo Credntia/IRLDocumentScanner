@@ -378,8 +378,8 @@
 -(void)didDetectRectangle:(IRLCameraView*)view withConfidence:(NSUInteger)confidence {
     __weak  typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (confidence > view.minimumConfidenceForFullDetection) {
-            NSInteger range     = view.maximumConfidenceForFullDetection - view.minimumConfidenceForFullDetection;
+        if (confidence > view.maximumConfidenceForFullDetection) {
+			NSInteger range     = 0;
             CGFloat   delta     = 4.0f / range;
             NSInteger current   = view.maximumConfidenceForFullDetection - confidence;
             NSInteger value     = (range - range / current) * delta;
