@@ -23,8 +23,6 @@
     NSTimer*                _borderDetectTimeKeeper;
     BOOL                    _borderDetectFrame;
     CIRectangleFeature*     _borderDetectLastRectangleFeature;
-    BOOL                    _FocusCurrentRectangleDone;
-
 }
 
 @property (readwrite)               BOOL                            didNotifyFullConfidence;
@@ -616,19 +614,6 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
             CGFloat amplitude = _borderDetectLastRectangleFeature.bounds.size.width / 4.0f;
             if(self.isCurrentlyFocusing && self.enableShowAutoFocus) image = [image drawFocusOverlayWithColor:[UIColor colorWithWhite:1.0f alpha:0.7f-alpha] point:_borderDetectLastRectangleFeature.centroid amplitude:amplitude*alpha];
             
-            // Focus Image on center
-            if (confidence > 50.0f && _FocusCurrentRectangleDone == NO)  {
-                _FocusCurrentRectangleDone = YES;
-                self.isCurrentlyFocusing = YES;
-                
-                [self focusAtPoint:_borderDetectLastRectangleFeature.centroid completionHandler:^{
-                    if (self.enableShowAutoFocus) {
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0f *NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                            self.isCurrentlyFocusing = NO;
-                        });
-                    }
-                }];
-            }
         }
         else {
             if ([self.delegate respondsToSelector:@selector(didLostConfidence:)]) {
@@ -637,7 +622,6 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
                 });
             }
             _imageDedectionConfidence = 0.0f;
-            _FocusCurrentRectangleDone = NO;
             self.isCurrentlyFocusing = NO;
         }
         
