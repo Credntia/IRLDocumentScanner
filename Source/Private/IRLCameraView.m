@@ -401,7 +401,7 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
                  }
             }
             
-            enhancedImage = [enhancedImage cropBordersWithMargin:40.0f];
+			enhancedImage = [enhancedImage cropBordersWithMargin:20.0f];
 
             if (isiOS10OrLater) {
                 finalImage = makeUIImageFromCIImage(enhancedImage);
@@ -496,14 +496,14 @@ CGImagePropertyOrientation imagePropertyOrientationForUIImageOrientation(UIImage
                       detectorPerf = [CIDetector detectorOfType:CIDetectorTypeRectangle context:nil options:@{
                                                                                                               CIDetectorAccuracy        : CIDetectorAccuracyLow,
 																											  CIDetectorAspectRatio     : @1.0,
-																											  CIDetectorMinFeatureSize  : @.38f
+																											  CIDetectorMinFeatureSize  : @.36f
 																											  //CIDetectorTracking        : @YES
                                                                                                               }];
                       
                       detectorHigh = [CIDetector detectorOfType:CIDetectorTypeRectangle context:nil options:@{
                                                                                                               CIDetectorAccuracy        : CIDetectorAccuracyHigh,
 																											  CIDetectorAspectRatio     : @1.0,
-																											  CIDetectorMinFeatureSize  : @.38f
+																											  CIDetectorMinFeatureSize  : @.36f
 																											  //CIDetectorTracking        : @YES
                                                                                                               }];
                   });
